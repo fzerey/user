@@ -1,0 +1,3 @@
+com\fzerey\user\infrastructure\repository\UserRepository.class
+com\fzerey\user\infrastructure\repository\GroupRepository.class
+com\fzerey\user\infrastructure\config\FlywayConfig.class

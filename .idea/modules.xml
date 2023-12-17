@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/user.iml" filepath="$PROJECT_DIR$/user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-controller/user-controller.iml" filepath="$PROJECT_DIR$/user-controller/user-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-domain/user-domain.iml" filepath="$PROJECT_DIR$/user-domain/user-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-host/user-host.iml" filepath="$PROJECT_DIR$/user-host/user-host.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-infrastructure/user-infrastructure.iml" filepath="$PROJECT_DIR$/user-infrastructure/user-infrastructure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
+    </modules>
+  </component>
+</project>

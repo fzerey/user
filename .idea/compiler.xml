@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="user-infrastructure" />
+        <module name="user-service" />
+        <module name="user-domain" />
+        <module name="user-host" />
+        <module name="user-controller" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="user" target="16" />
+      <module name="user-controller" target="16" />
+      <module name="user-domain" target="16" />
+      <module name="user-host" target="16" />
+      <module name="user-infrastructure" target="16" />
+      <module name="user-service" target="16" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="user-controller" options="-parameters" />
+      <module name="user-domain" options="-parameters" />
+      <module name="user-host" options="-parameters" />
+      <module name="user-infrastructure" options="-parameters" />
+      <module name="user-service" options="-parameters" />
+    </option>
+  </component>
+</project>
