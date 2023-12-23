@@ -6,6 +6,7 @@ import com.fzerey.user.domain.service.User.PasswordService;
 import com.fzerey.user.domain.service.User.TokenService;
 import com.fzerey.user.infrastructure.repository.UserRepository;
 import com.fzerey.user.service.auth.dtos.TokenDto;
+import com.fzerey.user.shared.exceptions.UnauthorizedAccessException;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -22,24 +23,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenDto login(String username, String password) {
-        var user = userRepository.findByUsername(username);
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new UnauthorizedAccessException());
         boolean isValid = passwordService.validatePassword(user, password);
         if(!isValid) {
-            throw new RuntimeException("Invalid username or password");
+            throw new UnauthorizedAccessException();
         }
         return new TokenDto(tokenService.generateToken(user));
-    }
-
-    @Override
-    public void logout(String token) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'logout'");
-    }
-
-    @Override
-    public boolean validateToken(String token) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateToken'");
     }
 
 }

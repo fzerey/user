@@ -15,6 +15,8 @@ import com.fzerey.user.service.user.dtos.CreateUserDto;
 import com.fzerey.user.service.user.dtos.GetUserDto;
 import com.fzerey.user.service.user.dtos.UpdateUserDto;
 import com.fzerey.user.service.user.dtos.UserAttributeDto;
+import com.fzerey.user.shared.exceptions.user.UserAlreadyExistsException;
+import com.fzerey.user.shared.exceptions.user.UserNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(CreateUserDto userDto) {
+        var existingUser = userRepository.findByUsername(userDto.getUsername());
+        if(existingUser.isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
         var group = groupRepository.findById(userDto.getGroupId()).get();
         User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhoneNumber(), group);
         passwordService.setPassword(user, userDto.getPassword());
@@ -51,14 +57,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserDto userDto) {
-        var user = userRepository.findById(userDto.getId()).get();
+        var user = userRepository.findById(userDto.getId()).orElseThrow(() -> new UserNotFoundException());
         user.setUsername(userDto.getUsername());
         userRepository.save(user);
     }
 
     @Override
     public GetUserDto getUser(Long id) {
-        var user = userRepository.findById(id).get();
+        var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         return new GetUserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber(),
                 user.getUserAttributes().stream()
                         .map(this::convertToUserAttributeDto).collect(Collectors.toSet()));

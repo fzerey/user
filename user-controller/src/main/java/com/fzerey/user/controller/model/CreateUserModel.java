@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fzerey.user.service.user.dtos.CreateUserDto;
@@ -15,19 +16,19 @@ import lombok.Setter;
 @Setter
 public class CreateUserModel {
 
-    @NotNull(message = "Username cannot be null")
+    @NotBlank(message = "Username cannot be null")
     private String username;
 
-    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be null")
     private String password;
 
-    @NotNull(message = "Email cannot be null")
+    @NotBlank(message = "Email cannot be null")
     private String email;
 
-    @NotNull(message = "Phone number cannot be null")
+    @NotBlank(message = "Phone number cannot be null")
     private String phoneNumber;
 
-    @NotNull(message = "Group id cannot be null")
+    @NotBlank(message = "Group id cannot be null")
     private Long groupId;
 
     @Valid
