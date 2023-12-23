@@ -1,34 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <artifactId>user</artifactId>
+        <groupId>com.fzerey</groupId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.fzerey</groupId>
-    <artifactId>user</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>user</name>
+
+    <groupId>${parent.groupId}</groupId>
+    <artifactId>user-shared</artifactId>
+    <version>${parent.version}</version>
+
+    <packaging>jar</packaging>
+    <name>user-shared</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
-    <packaging>pom</packaging>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
     </properties>
-    <dependencies>
-    </dependencies>
+
     <build>
-        <pluginManagement>
-            <!-- lock down plugins versions to avoid using Maven defaults (may be moved to
-            parent pom) -->
+        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be
+            moved to
+      parent pom) -->
             <plugins>
                 <!-- clean lifecycle, see
-                https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.1.0</version>
@@ -60,7 +62,7 @@
                     <version>2.8.2</version>
                 </plugin>
                 <!-- site lifecycle, see
-                https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.7.1</version>
@@ -90,14 +92,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <modules>
-        <module>user-service</module>
-        <module>user-infrastructure</module>
-        <module>user-domain</module>
-        <module>user-host</module>
-        <module>user-controller</module>
-        <module>user-shared</module>
-    </modules>
-
 </project>

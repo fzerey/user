@@ -1,4 +1,4 @@
-package com.fzerey.user.host.config;
+package com.fzerey.user.host.config.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        final var user = userRepository.findByUsername(username);
+        final var user = userRepository.findByUsername(username).get();
         if (user == null) {
             throw new UsernameNotFoundException("User" + username + "not found");
         }

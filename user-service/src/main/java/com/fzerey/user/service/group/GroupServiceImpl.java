@@ -9,6 +9,7 @@ import com.fzerey.user.infrastructure.repository.GroupRepository;
 import com.fzerey.user.service.group.dtos.GetGroupDto;
 import com.fzerey.user.service.group.dtos.CreateGroupDto;
 import com.fzerey.user.service.group.dtos.UpdateGroupDto;
+import com.fzerey.user.shared.exceptions.group.GroupNotFoundException;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -21,26 +22,30 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void createGroup(CreateGroupDto groupDto) {
+        var existingGroup = repository.findByName(groupDto.getName());
+        if(existingGroup.isPresent()) {
+            throw new RuntimeException("Group already exists");
+        }
         var group = new Group(groupDto.getName());
         repository.save(group);
     }
 
     @Override
     public void updateGroup(UpdateGroupDto groupDto) {
-        var group = repository.findById(groupDto.getId()).get();
+        var group = repository.findById(groupDto.getId()).orElseThrow(() -> new GroupNotFoundException());
         group.setName(groupDto.getName());
         repository.save(group);
     }
 
     @Override
     public void deleteGroup(Long id) {
-        var group = repository.findById(id).get();
+        var group = repository.findById(id).orElseThrow(() -> new GroupNotFoundException());
         repository.delete(group);
     }
 
     @Override
     public GetGroupDto getGroup(Long id) {
-        var group = repository.findById(id).get();
+        var group = repository.findById(id).orElseThrow(() -> new GroupNotFoundException());
         return new GetGroupDto(group.getId(), group.getName());
     }
 
