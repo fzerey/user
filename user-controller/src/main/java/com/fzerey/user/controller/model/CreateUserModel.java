@@ -32,7 +32,7 @@ public class CreateUserModel {
 
     @Valid
     private List<UserAttributeModel> attributes;
-
+    
     public CreateUserDto toUserDto() {
         return new CreateUserDto(username, password, email, phoneNumber, groupId,
                 attributes.stream().map(UserAttributeModel::toDto).collect(Collectors.toList()));

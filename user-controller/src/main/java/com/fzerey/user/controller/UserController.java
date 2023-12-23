@@ -1,7 +1,5 @@
 package com.fzerey.user.controller;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -25,21 +23,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping ResponseEntity<?> createUser(@Valid @RequestBody CreateUserModel createUserModel) {
-        
+    @PostMapping
+    ResponseEntity<?> createUser(@Valid @RequestBody CreateUserModel createUserModel) {
+
         var createUserDto = createUserModel.toUserDto();
         userService.createUser(createUserDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping ResponseEntity<?> listUsers() {
+    @GetMapping
+    ResponseEntity<?> listUsers() {
         var users = userService.getUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}") ResponseEntity<?> getUser(Long id) {
+    @GetMapping("/{id}")
+    ResponseEntity<?> getUser(Long id) {
         var user = userService.getUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    
+
 }

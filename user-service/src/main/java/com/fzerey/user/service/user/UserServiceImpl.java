@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fzerey.user.domain.model.User;
 import com.fzerey.user.domain.model.UserAttribute;
+import com.fzerey.user.domain.service.User.PasswordService;
 import com.fzerey.user.infrastructure.repository.AttributeRepository;
 import com.fzerey.user.infrastructure.repository.GroupRepository;
 import com.fzerey.user.infrastructure.repository.UserRepository;
@@ -21,18 +22,21 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final AttributeRepository attributeRepository;
+    private final PasswordService passwordService;
 
     public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository,
-            AttributeRepository attributeRepository) {
+            AttributeRepository attributeRepository, PasswordService passwordService) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.attributeRepository = attributeRepository;
+        this.passwordService = passwordService;
     }
 
     @Override
     public void createUser(CreateUserDto userDto) {
         var group = groupRepository.findById(userDto.getGroupId()).get();
         User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhoneNumber(), group);
+        passwordService.setPassword(user, userDto.getPassword());
         var attributes = userDto.getAttributes();
         for (var attr : attributes) {
             var attribute = attributeRepository.findByKey(attr.getKey()).get();

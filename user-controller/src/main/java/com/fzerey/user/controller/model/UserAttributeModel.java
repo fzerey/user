@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fzerey.user.service.user.dtos.UserAttributeDto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

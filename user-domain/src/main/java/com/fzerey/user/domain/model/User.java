@@ -18,7 +18,6 @@ public class User {
 
     public User(String username, String password, String email, String phoneNumber, Group group) {
         this.username = username;
-        this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.group = group;
@@ -32,8 +31,11 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "hashed_password")
+    private String hashedPassword;
+
+    @Column(name = "salt")
+    private byte[] salt;
 
     @Column(name ="email")
     private String email;
