@@ -2,13 +2,19 @@ package com.fzerey.user.service.user.dtos;
 
 import java.util.List;
 
-public class CreateUserDto{
+import lombok.Getter;
+import lombok.Setter;
 
-    
+@Getter
+@Setter
+public class CreateUserDto {
 
-    public CreateUserDto(String username, String password, Long groupId, List<UserAttributeDto> attributes) {
+    public CreateUserDto(String username, String password, String email, String phoneNumber, Long groupId,
+            List<UserAttributeDto> attributes) {
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.groupId = groupId;
         this.attributes = attributes;
     }
@@ -17,40 +23,10 @@ public class CreateUserDto{
 
     private String password;
 
+    private String email;
+    private String phoneNumber;
     private Long groupId;
 
     private List<UserAttributeDto> attributes;
 
-    public List<UserAttributeDto> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<UserAttributeDto> attributes) {
-        this.attributes = attributes;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-    
 }

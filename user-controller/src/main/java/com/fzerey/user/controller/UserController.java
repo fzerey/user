@@ -1,5 +1,9 @@
 package com.fzerey.user.controller;
 
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fzerey.user.controller.model.CreateUserModel;
 import com.fzerey.user.service.user.UserService;
-import com.fzerey.user.service.user.dtos.CreateUserDto;
 
 @RestController
 @RequestMapping("/api/1.0/users")
@@ -21,7 +25,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
+    @PostMapping ResponseEntity<?> createUser(@Valid @RequestBody CreateUserModel createUserModel) {
+        
+        var createUserDto = createUserModel.toUserDto();
         userService.createUser(createUserDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

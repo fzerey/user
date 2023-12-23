@@ -16,9 +16,11 @@ import java.util.HashSet;
 @Table(name = "users")
 public class User {
 
-    public User(String username, String password, Group group) {
+    public User(String username, String password, String email, String phoneNumber, Group group) {
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.group = group;
         this.userAttributes = new HashSet<UserAttribute>();
     }
@@ -32,6 +34,12 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name ="email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

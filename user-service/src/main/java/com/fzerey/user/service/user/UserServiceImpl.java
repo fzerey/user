@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(CreateUserDto userDto) {
         var group = groupRepository.findById(userDto.getGroupId()).get();
-        User user = new User(userDto.getUsername(), userDto.getPassword(), group);
+        User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhoneNumber(), group);
         var attributes = userDto.getAttributes();
         for (var attr : attributes) {
             var attribute = attributeRepository.findByKey(attr.getKey()).get();
@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public GetUserDto getUser(Long id) {
         var user = userRepository.findById(id).get();
-        return new GetUserDto(user.getId(), user.getUsername(), user.getUserAttributes().stream()
-                .map(this::convertToUserAttributeDto).collect(Collectors.toSet()));
+        return new GetUserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber(),
+                user.getUserAttributes().stream()
+                        .map(this::convertToUserAttributeDto).collect(Collectors.toSet()));
     }
 
     @Override
@@ -65,8 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private GetUserDto convertToGetUserDto(User user) {
-        GetUserDto dto = new GetUserDto(user.getId(), user.getUsername(), user.getUserAttributes().stream()
-                .map(this::convertToUserAttributeDto).collect(Collectors.toSet()));
+        GetUserDto dto = new GetUserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber(),
+                user.getUserAttributes().stream()
+                        .map(this::convertToUserAttributeDto).collect(Collectors.toSet()));
         return dto;
     }
 
