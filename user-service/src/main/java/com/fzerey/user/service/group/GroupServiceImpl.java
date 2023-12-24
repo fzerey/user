@@ -48,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GetGroupDto getGroup(Long id) {
-        var group = repository.findById(id).orElseThrow(() -> new GroupNotFoundException());
+        var group = repository.findById(id).orElseThrow(GroupNotFoundException::new);
         return new GetGroupDto(group.getId(), group.getName());
     }
 

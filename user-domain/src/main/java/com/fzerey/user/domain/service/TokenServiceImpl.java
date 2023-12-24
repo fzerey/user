@@ -1,4 +1,4 @@
-package com.fzerey.user.domain.service.user;
+package com.fzerey.user.domain.service;
 
 import java.util.Date;
 
