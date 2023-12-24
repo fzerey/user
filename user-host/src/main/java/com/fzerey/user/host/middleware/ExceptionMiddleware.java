@@ -13,6 +13,7 @@ import com.fzerey.user.shared.exceptions.constants.ExceptionMessages;
 
 @ControllerAdvice
 public class ExceptionMiddleware {
+    
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
@@ -34,6 +35,7 @@ public class ExceptionMiddleware {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
+
         return new ResponseEntity<ExceptionResponse>(
                 new ExceptionResponse(ExceptionMessages.UNEXPECTED_EXCEPTION, ExceptionCodes.UNEXPECTED_EXCEPTION),
                 HttpStatus.INTERNAL_SERVER_ERROR);

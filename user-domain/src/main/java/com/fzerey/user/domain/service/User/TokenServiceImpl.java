@@ -21,6 +21,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("sub", user.getSubId());
+        var attributes = user.getUserAttributes();
+        for (var attribute : attributes) {
+            claims.put(attribute.getAttribute().getKey(), attribute.getValue());
+        }
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

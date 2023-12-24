@@ -1,11 +1,16 @@
 package com.fzerey.user.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.fzerey.user.controller.model.ListGroupModel;
 import com.fzerey.user.service.group.GroupService;
 import com.fzerey.user.service.group.dtos.CreateGroupDto;
 import com.fzerey.user.service.group.dtos.GetGroupDto;
@@ -30,15 +35,17 @@ public class GroupController {
     }
 
     @GetMapping
-    ResponseEntity<?> listGroups() {
-        var groups = groupService.getGroups();
-        return new ResponseEntity<List<GetGroupDto>>(groups, HttpStatus.OK);
+    ResponseEntity<?> listGroups(@ModelAttribute ListGroupModel model) {
+        var groups = groupService.getGroups(model.toDto());
+        return new ResponseEntity<>(groups, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     ResponseEntity<?> getGroup(@PathParam("id") Long id) {
         var groups = groupService.getGroup(id);
         return new ResponseEntity<GetGroupDto>(groups, HttpStatus.OK);
     }
+
     @PutMapping("/{id}")
     ResponseEntity<?> updateGroup(@PathParam("id") Long id, @RequestBody UpdateGroupDto updateGroupDto) {
         updateGroupDto.setId(id);

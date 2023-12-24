@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fzerey.user.controller.model.CreateUserModel;
+import com.fzerey.user.controller.model.ListUserModel;
 import com.fzerey.user.service.user.UserService;
 
 @RestController
@@ -37,8 +39,8 @@ public class UserController {
     }
 
     @GetMapping
-    ResponseEntity<?> listUsers() {
-        var users = userService.getUsers();
+    ResponseEntity<?> listUsers(@ModelAttribute ListUserModel model) {
+        var users = userService.getUsers(model.toDto());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

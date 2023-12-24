@@ -1,18 +1,20 @@
 package com.fzerey.user.domain.model;
 
 import jakarta.persistence.*;
-
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.HashSet;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Transactional
 @Table(name = "users")
 public class User {
 
@@ -21,12 +23,15 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.group = group;
-        this.userAttributes = new HashSet<UserAttribute>();
+        this.subId = UUID.randomUUID().toString();
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "sub_id")
+    private String subId;
 
     @Column(name = "username")
     private String username;
@@ -47,8 +52,8 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserAttribute> userAttributes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<UserAttribute> userAttributes = new HashSet<UserAttribute>();
 
     public void addAttribute(UserAttribute userAttribute) {
         if (userAttributes == null)

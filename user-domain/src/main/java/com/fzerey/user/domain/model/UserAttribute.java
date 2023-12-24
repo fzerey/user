@@ -13,20 +13,21 @@ import lombok.Setter;
 public class UserAttribute {
 
     
-    public UserAttribute(Attribute attribute, String value) {
-        this.attribute = attribute;
+    public UserAttribute(Long attributeId, Long userId, String value) {
+        this.id = new UserAttributeId(userId, attributeId);
         this.value = value;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private UserAttributeId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("attributeId")
     @JoinColumn(name = "attribute_id")
     private Attribute attribute;
 

@@ -19,14 +19,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        final var user = userRepository.findByUsername(username).get();
-        if (user == null) {
-            throw new UsernameNotFoundException("User" + username + "not found");
-        }
+        final var user = userRepository.findBySubId(username).orElseThrow(() -> new UsernameNotFoundException("User" + username + "not found"));
+        var attributes = user.getUserAttributes();
+        var roles = attributes.stream().filter(attr -> attr.getAttribute().getKey().equals("roles")).findFirst().get();
+        var rolesString = roles != null ? roles.getValue() : "user";
         return org.springframework.security.core.userdetails.User
                 .withUsername(username)
                 .password(user.getHashedPassword())
-                .authorities("USER")
+                .authorities(rolesString)
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)

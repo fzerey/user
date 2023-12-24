@@ -1,0 +1,2 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+ALTER TABLE users ADD COLUMN sub_id VARCHAR(255) NOT NULL DEFAULT uuid_generate_v4();
