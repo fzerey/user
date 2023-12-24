@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.fzerey.user.domain.model.Group;
 import com.fzerey.user.domain.model.User;
-import com.fzerey.user.domain.service.User.PasswordService;
+import com.fzerey.user.domain.service.PasswordService;
 import com.fzerey.user.infrastructure.repository.AttributeRepository;
 import com.fzerey.user.infrastructure.repository.GroupRepository;
 import com.fzerey.user.infrastructure.repository.UserRepository;
@@ -27,7 +26,7 @@ import com.fzerey.user.service.user.dtos.CreateUserDto;
 import com.fzerey.user.service.user.dtos.UserAttributeDto;
 import com.fzerey.user.shared.exceptions.user.UserAlreadyExistsException;
 
-public class UserServiceTest {
+class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 

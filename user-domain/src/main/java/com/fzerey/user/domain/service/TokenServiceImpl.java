@@ -1,4 +1,4 @@
-package com.fzerey.user.domain.service.User;
+package com.fzerey.user.domain.service.user;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Value("${auth.jwt.secret}")
     private String secretKey;
-    private final long tokenValidityInMilliseconds = 3600000;
+    private static final long TOKEN_VALIDITY_IN_MILLISECONDS = 3600000;
 
     @Override
     public String generateToken(User user) {
@@ -29,7 +29,7 @@ public class TokenServiceImpl implements TokenService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenValidityInMilliseconds))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_IN_MILLISECONDS))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }

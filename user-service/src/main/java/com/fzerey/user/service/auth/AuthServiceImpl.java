@@ -2,8 +2,8 @@ package com.fzerey.user.service.auth;
 
 import org.springframework.stereotype.Service;
 
-import com.fzerey.user.domain.service.User.PasswordService;
-import com.fzerey.user.domain.service.User.TokenService;
+import com.fzerey.user.domain.service.PasswordService;
+import com.fzerey.user.domain.service.TokenService;
 import com.fzerey.user.infrastructure.repository.UserRepository;
 import com.fzerey.user.service.auth.dtos.TokenDto;
 import com.fzerey.user.shared.exceptions.UnauthorizedAccessException;
@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenDto login(String username, String password) {
-        var user = userRepository.findByUsername(username).orElseThrow(() -> new UnauthorizedAccessException());
+        var user = userRepository.findByUsername(username).orElseThrow(UnauthorizedAccessException::new);
         boolean isValid = passwordService.validatePassword(user, password);
         if(!isValid) {
             throw new UnauthorizedAccessException();

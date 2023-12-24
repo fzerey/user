@@ -1,4 +1,4 @@
-package com.fzerey.user.domain.service.User;
+package com.fzerey.user.domain.service;
 
 import com.fzerey.user.domain.model.User;
 

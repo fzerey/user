@@ -13,8 +13,6 @@
   <artifactId>user-service</artifactId>
   <version>${parent.version}</version>
   <name>user-service</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <packaging>jar</packaging>
   <properties>

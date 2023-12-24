@@ -11,6 +11,7 @@ import com.fzerey.user.service.group.dtos.CreateGroupDto;
 import com.fzerey.user.service.group.dtos.GetGroupDto;
 import com.fzerey.user.service.group.dtos.ListGroupDto;
 import com.fzerey.user.service.group.dtos.UpdateGroupDto;
+import com.fzerey.user.shared.exceptions.group.GroupAlreadyExistsException;
 import com.fzerey.user.shared.exceptions.group.GroupNotFoundException;
 import com.fzerey.user.shared.requests.model.PagedResponse;
 
@@ -25,24 +26,23 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void createGroup(CreateGroupDto groupDto) {
-        var existingGroup = repository.findByName(groupDto.getName());
-        if (existingGroup.isPresent()) {
-            throw new RuntimeException("Group already exists");
-        }
+        repository.findByName(groupDto.getName()).ifPresent(g -> {
+            throw new GroupAlreadyExistsException();
+        });
         var group = new Group(groupDto.getName());
         repository.save(group);
     }
 
     @Override
     public void updateGroup(UpdateGroupDto groupDto) {
-        var group = repository.findById(groupDto.getId()).orElseThrow(() -> new GroupNotFoundException());
+        var group = repository.findById(groupDto.getId()).orElseThrow(GroupNotFoundException::new);
         group.setName(groupDto.getName());
         repository.save(group);
     }
 
     @Override
     public void deleteGroup(Long id) {
-        var group = repository.findById(id).orElseThrow(() -> new GroupNotFoundException());
+        var group = repository.findById(id).orElseThrow(GroupNotFoundException::new);
         repository.delete(group);
     }
 
@@ -63,13 +63,12 @@ public class GroupServiceImpl implements GroupService {
         Pageable pageable = PageRequest.of(listGroupDto.getPage() - 1, listGroupDto.getSize(), sort);
         var groups = listGroupDto.getQuery() != null ? repository.findByNameLike(listGroupDto.getQuery(), pageable)
                 : repository.findAll(pageable);
-        PagedResponse<GetGroupDto> response = new PagedResponse<GetGroupDto>();
+        PagedResponse<GetGroupDto> response = new PagedResponse<>();
         response.fromPage(groups.map(this::convertToDto));
         return response;
     }
 
     private GetGroupDto convertToDto(Group group) {
-        GetGroupDto dto = new GetGroupDto(group.getId(), group.getName());
-        return dto;
+        return new GetGroupDto(group.getId(), group.getName());
     }
 }

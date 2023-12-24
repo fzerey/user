@@ -1,8 +1,9 @@
 package com.fzerey.user.service.group;
 
-import java.util.List;
-
-import com.fzerey.user.service.group.dtos.*;
+import com.fzerey.user.service.group.dtos.CreateGroupDto;
+import com.fzerey.user.service.group.dtos.GetGroupDto;
+import com.fzerey.user.service.group.dtos.ListGroupDto;
+import com.fzerey.user.service.group.dtos.UpdateGroupDto;
 import com.fzerey.user.shared.requests.model.PagedResponse;
 
 public interface GroupService {

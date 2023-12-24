@@ -1,6 +1,6 @@
 package com.fzerey.user.shared.exceptions;
 public class AlreadyExistsException extends RuntimeException {
-    private String code;
+    private final String code;
     public AlreadyExistsException(String message, String code) {
         super(message);
         this.code = code;

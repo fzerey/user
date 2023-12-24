@@ -15,8 +15,6 @@
 
     <packaging>jar</packaging>
     <name>user-test</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
 
     <dependencies>

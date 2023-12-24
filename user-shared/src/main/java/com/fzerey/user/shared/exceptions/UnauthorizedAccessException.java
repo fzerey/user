@@ -5,7 +5,7 @@ import com.fzerey.user.shared.exceptions.constants.ExceptionMessages;
 
 public class UnauthorizedAccessException extends RuntimeException {
     
-    private String code;
+    private final String code;
 
     public UnauthorizedAccessException(){
         super(ExceptionMessages.UNAUTHORIZED_ACCESS_EXCEPTION);
