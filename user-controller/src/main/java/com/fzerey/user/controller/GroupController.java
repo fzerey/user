@@ -15,6 +15,7 @@ import com.fzerey.user.service.group.GroupService;
 import com.fzerey.user.service.group.dtos.CreateGroupDto;
 import com.fzerey.user.service.group.dtos.GetGroupDto;
 import com.fzerey.user.service.group.dtos.UpdateGroupDto;
+import com.fzerey.user.shared.requests.model.PagedResponse;
 
 import jakarta.websocket.server.PathParam;
 
@@ -29,25 +30,19 @@ public class GroupController {
     }
 
     @PostMapping
-    ResponseEntity<?> createGroup(@RequestBody CreateGroupDto createGroupDto) {
+    ResponseEntity<Void> createGroup(@RequestBody CreateGroupDto createGroupDto) {
         groupService.createGroup(createGroupDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    ResponseEntity<?> listGroups(@ModelAttribute ListGroupModel model) {
+    ResponseEntity<PagedResponse<GetGroupDto>> listGroups(@ModelAttribute ListGroupModel model) {
         var groups = groupService.getGroups(model.toDto());
-        return new ResponseEntity<>(groups, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    ResponseEntity<?> getGroup(@PathParam("id") Long id) {
-        var groups = groupService.getGroup(id);
-        return new ResponseEntity<GetGroupDto>(groups, HttpStatus.OK);
+        return ResponseEntity.ok(groups);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<?> updateGroup(@PathParam("id") Long id, @RequestBody UpdateGroupDto updateGroupDto) {
+    ResponseEntity<Void> updateGroup(@PathParam("id") Long id, @RequestBody UpdateGroupDto updateGroupDto) {
         updateGroupDto.setId(id);
         groupService.updateGroup(updateGroupDto);
         return new ResponseEntity<>(HttpStatus.OK);

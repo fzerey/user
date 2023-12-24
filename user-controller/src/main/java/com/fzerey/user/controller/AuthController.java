@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fzerey.user.controller.model.LoginUserModel;
 import com.fzerey.user.service.auth.AuthService;
+import com.fzerey.user.service.auth.dtos.TokenDto;
 
 @RestController
 @RequestMapping("/api/1.0/auth")
@@ -20,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserModel loginRequest) {
+    public ResponseEntity<TokenDto> login(@RequestBody LoginUserModel loginRequest) {
         var response = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
         return ResponseEntity.ok(response);   
     }

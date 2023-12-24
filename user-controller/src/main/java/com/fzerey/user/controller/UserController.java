@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fzerey.user.controller.model.CreateUserModel;
 import com.fzerey.user.controller.model.ListUserModel;
 import com.fzerey.user.service.user.UserService;
+import com.fzerey.user.service.user.dtos.GetUserDto;
+import com.fzerey.user.shared.requests.model.PagedResponse;
 
 @RestController
 @RequestMapping("/api/1.0/users")
@@ -28,26 +30,22 @@ public class UserController {
     }
 
     @PostMapping
-    ResponseEntity<?> createUser(@Valid @RequestBody CreateUserModel createUserModel, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
-        }
+    ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserModel createUserModel, BindingResult bindingResult) {
         var createUserDto = createUserModel.toUserDto();
         userService.createUser(createUserDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    ResponseEntity<?> listUsers(@ModelAttribute ListUserModel model) {
+    ResponseEntity<PagedResponse<GetUserDto>> listUsers(@ModelAttribute ListUserModel model) {
         var users = userService.getUsers(model.toDto());
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<?> getUser(@PathVariable Long id) {
+    ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
         var user = userService.getUser(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 
 }
