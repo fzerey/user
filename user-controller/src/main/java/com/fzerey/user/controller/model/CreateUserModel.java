@@ -2,7 +2,6 @@ package com.fzerey.user.controller.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +36,7 @@ public class CreateUserModel {
 
     public CreateUserDto toUserDto() {
         var userAttributes = attributes == null || attributes.isEmpty() ? new ArrayList<UserAttributeDto>()
-                : attributes.stream().map(UserAttributeModel::toDto).collect(Collectors.toList());
+                : attributes.stream().map(UserAttributeModel::toDto).toList();
         return new CreateUserDto(username, password, email, phoneNumber, groupId, userAttributes);
     }
 }

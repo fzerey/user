@@ -2,9 +2,9 @@ package com.fzerey.user.service.user;
 
 import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -47,12 +47,13 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException();
         });
         var group = groupRepository.findById(userDto.getGroupId()).orElseThrow(GroupNotFoundException::new);
-        User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhoneNumber(),
+        User user = new User(userDto.getUsername(), userDto.getEmail(), userDto.getPhoneNumber(),
                 group);
         passwordService.setPassword(user, userDto.getPassword());
         var attributes = userDto.getAttributes();
         for (var attr : attributes) {
-            var attribute = attributeRepository.findByKey(attr.getKey()).orElseThrow(AttributeNotFoundException::new);
+            var attribute = attributeRepository.findByKey(attr.getKey())
+                    .orElseThrow(() -> new AttributeNotFoundException(attr.getKey()));
             UserAttribute userAttribute = new UserAttribute(user.getId(), attribute.getId(), attr.getValue());
             userAttribute.setUser(user);
             userAttribute.setAttribute(attribute);
@@ -64,6 +65,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UpdateUserDto userDto) {
         var user = userRepository.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
+        if (userDto.getAttributes() != null) {
+            for (var attr : userDto.getAttributes()) {
+                var attribute = attributeRepository.findByKey(attr.getKey())
+                        .orElseThrow(() -> new AttributeNotFoundException(attr.getKey()));
+                UserAttribute userAttribute = new UserAttribute(userDto.getId(), attribute.getId(), attr.getValue());
+                userAttribute.setUser(user);
+                userAttribute.setAttribute(attribute);
+                user.addAttribute(userAttribute);
+            }
+        }
         user.setUsername(userDto.getUsername());
         userRepository.save(user);
     }
@@ -84,11 +95,12 @@ public class UserServiceImpl implements UserService {
         } else {
             sort = sort.ascending();
         }
-        
+
         Pageable pageable = PageRequest.of(listUserDto.getPage() - 1, listUserDto.getSize(), sort);
         Page<User> pagedResult;
         if (listUserDto.getQuery() != null && listUserDto.getGroupId() != null) {
-            pagedResult = userRepository.findByGroupIdAndSearchByMultipleFields(pageable, listUserDto.getGroupId(), listUserDto.getQuery());
+            pagedResult = userRepository.findByGroupIdAndSearchByMultipleFields(pageable, listUserDto.getGroupId(),
+                    listUserDto.getQuery());
         } else if (listUserDto.getQuery() != null) {
             pagedResult = userRepository.findByQuery(listUserDto.getQuery(), pageable);
         } else if (listUserDto.getGroupId() != null) {
@@ -96,7 +108,7 @@ public class UserServiceImpl implements UserService {
         } else {
             pagedResult = userRepository.findAll(pageable);
         }
-        
+
         var users = pagedResult;
         var response = new PagedResponse<GetUserDto>();
         response.fromPage(users.map(this::convertToGetUserDto));

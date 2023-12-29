@@ -15,8 +15,6 @@
 
     <packaging>jar</packaging>
     <name>user-shared</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
 
     <dependencies>
@@ -24,7 +22,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -40,8 +38,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <build>

@@ -26,3 +26,5 @@ replay_pid*
 # directory
 .idea/
 .vscode/
+target/sonar/.sonar_lock
+target/sonar/report-task.txt
