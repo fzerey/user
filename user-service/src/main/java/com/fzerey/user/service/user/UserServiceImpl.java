@@ -74,12 +74,10 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
         if (userDto.getAttributes() != null) {
             for (var attr : userDto.getAttributes()) {
-                var attribute = attributeRepository.findByKey(attr.getKey())
+                var userAttribute = user.getUserAttributes().stream()
+                        .filter(a -> a.getAttribute().getKey().equals(attr.getKey())).findFirst()
                         .orElseThrow(() -> new AttributeNotFoundException(attr.getKey()));
-                UserAttribute userAttribute = new UserAttribute(userDto.getId(), attribute.getId(), attr.getValue());
-                userAttribute.setUser(user);
-                userAttribute.setAttribute(attribute);
-                user.addAttribute(userAttribute);
+                userAttribute.setValue(attr.getValue());
             }
         }
         user.setUsername(userDto.getUsername());
