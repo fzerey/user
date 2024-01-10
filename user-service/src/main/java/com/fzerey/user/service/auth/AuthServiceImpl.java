@@ -55,6 +55,8 @@ public class AuthServiceImpl implements AuthService {
                     .orElseThrow(UnauthorizedAccessException::new);
             var refreshToken = new TokenDto(tokenService.generateToken(user));
             user.refreshToken(existingToken, new Token(refreshToken.getAccessToken(), user));
+            userRepository.save(user);
+            return refreshToken;
         }
         throw new UnauthorizedAccessException();
 
@@ -64,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
     public void logout(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(UnauthorizedAccessException::new);
         user.logout();
+        userRepository.save(user);
     }
 
 }
