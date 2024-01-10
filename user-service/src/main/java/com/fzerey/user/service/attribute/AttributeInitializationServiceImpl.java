@@ -1,5 +1,6 @@
 package com.fzerey.user.service.attribute;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.fzerey.user.infrastructure.repository.AttributeRepository;
 import jakarta.annotation.PostConstruct;
 
 @Service
+@DependsOn({ "flyway", "flywayInitializer" })
 public class AttributeInitializationServiceImpl implements AttributeInitializationService {
 
     private AttributeRepository attributeRepository;
@@ -32,7 +34,6 @@ public class AttributeInitializationServiceImpl implements AttributeInitializati
                     attributeRepository.save(attribute);
                 });
             }
-        }
+        } 
     }
-
 }

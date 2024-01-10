@@ -1,0 +1,2 @@
+ALTER TABLE tokens
+ALTER COLUMN access_token TYPE TEXT;

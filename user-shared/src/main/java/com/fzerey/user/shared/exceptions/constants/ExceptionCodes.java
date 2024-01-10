@@ -9,6 +9,10 @@ public class ExceptionCodes {
     public static final String GROUP_NOT_FOUND = "201";
     public static final String GROUP_ALREADY_EXISTS = "202";    
     public static final String ATTRIBUTE_NOT_FOUND = "301";
+    public static final String ATTRIBUTE_ALTREADY_EXISTS = "302";
     public static final String UNAUTHORIZED_ACCESS_EXCEPTION = "401";
+    public static final String INVALID_TOKEN_EXCEPTION = "402";
     public static final String UNEXPECTED_EXCEPTION = "500";
+
+    
 }

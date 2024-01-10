@@ -2,6 +2,7 @@ package com.fzerey.user.domain.service;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -41,11 +42,19 @@ public class PasswordServiceImpl implements PasswordService {
         return generatedPassword;
     }
 
+    private static final Random random = new Random();
+
     private byte[] generateSalt() {
         byte[] salt = new byte[16];
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(salt);
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(salt);
         return salt;
+    }
+
+    @Override
+    public void generateVerificationCode(User user) {
+        String code = String.format("%06d", random.nextInt(999999));
+        user.setVerificationCode(code);
     }
 
 }

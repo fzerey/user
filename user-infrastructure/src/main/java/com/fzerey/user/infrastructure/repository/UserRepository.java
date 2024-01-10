@@ -31,4 +31,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     public Page<User> findByQuery(@Param("query") String query, Pageable pageable);
 
+    public Optional<User> findById(Long id);
 }

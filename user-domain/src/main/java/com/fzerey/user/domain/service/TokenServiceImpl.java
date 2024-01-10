@@ -34,4 +34,20 @@ public class TokenServiceImpl implements TokenService {
                 .compact();
     }
 
+    @Override
+    public boolean verifyToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+
 }
