@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,11 +29,12 @@ import com.fzerey.user.domain.model.Attribute;
 import com.fzerey.user.domain.model.Group;
 import com.fzerey.user.domain.model.User;
 import com.fzerey.user.domain.service.PasswordService;
+import com.fzerey.user.infrastructure.io.EmailService;
 import com.fzerey.user.infrastructure.repository.AttributeRepository;
 import com.fzerey.user.infrastructure.repository.GroupRepository;
 import com.fzerey.user.infrastructure.repository.UserRepository;
 import com.fzerey.user.service.user.UserServiceImpl;
-import com.fzerey.user.service.user.dtos.CreateUserDto;
+import com.fzerey.user.service.user.dtos.SignupUserDto;
 import com.fzerey.user.service.user.dtos.GetUserDto;
 import com.fzerey.user.service.user.dtos.ListUserDto;
 import com.fzerey.user.service.user.dtos.UpdateUserDto;
@@ -56,6 +58,9 @@ class UserServiceTest {
     @Mock
     private PasswordService passwordService;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -65,7 +70,7 @@ class UserServiceTest {
     }
 
     private Page<User> createMockedPage() {
-        List<User> list = Arrays.asList(new User(), new User()); // Replace with actual user creation logic
+        List<User> list = Arrays.asList(new User(), new User());
         return new PageImpl<>(list);
     }
 
@@ -75,7 +80,7 @@ class UserServiceTest {
         var attributeList = new ArrayList<UserAttributeDto>();
         attributeList.add(new UserAttributeDto("key", "value"));
 
-        CreateUserDto newUserDto = new CreateUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
+        SignupUserDto newUserDto = new SignupUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
                 attributeList); // Set necessary fields
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(groupRepository.findById(any(Long.class))).thenReturn(Optional.of(new Group()));
@@ -83,8 +88,8 @@ class UserServiceTest {
         attribute.setKey("key");
         attribute.setId(Long.valueOf(1));
         when(attributeRepository.findByKey(anyString())).thenReturn(Optional.of(attribute));
-
-        userService.createUser(newUserDto);
+        doNothing().when(emailService).sendSimpleMessage(anyString(), anyString(), anyString());
+        userService.signup(newUserDto);
 
         verify(userRepository).save(any(User.class));
     }
@@ -92,36 +97,36 @@ class UserServiceTest {
     @Test
     void createUser_whenUserExists_shouldThrowException() {
 
-        CreateUserDto newUserDto = new CreateUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
+        SignupUserDto newUserDto = new SignupUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
                 new ArrayList<UserAttributeDto>()); // Set necessary fields
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(new User()));
         when(groupRepository.findById(any(Long.class))).thenReturn(Optional.of(new Group()));
 
-        assertThrows(UserAlreadyExistsException.class, () -> userService.createUser(newUserDto));
+        assertThrows(UserAlreadyExistsException.class, () -> userService.signup(newUserDto));
     }
 
     @Test
     void createUser_whenGroupNotExists_shouldThrowException() {
 
-        CreateUserDto newUserDto = new CreateUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
+        SignupUserDto newUserDto = new SignupUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
                 new ArrayList<UserAttributeDto>()); // Set necessary fields
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(groupRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        assertThrows(GroupNotFoundException.class, () -> userService.createUser(newUserDto));
+        assertThrows(GroupNotFoundException.class, () -> userService.signup(newUserDto));
     }
 
     @Test
     void createUser_whenAttributeNotExists_shouldThrowException() {
         var attributeList = new ArrayList<UserAttributeDto>();
         attributeList.add(new UserAttributeDto("key", "value"));
-        CreateUserDto newUserDto = new CreateUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
+        SignupUserDto newUserDto = new SignupUserDto("username", "password", "email", "phoneNumber", Long.valueOf(1),
                 attributeList); // Set necessary fields
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(groupRepository.findById(any(Long.class))).thenReturn(Optional.of(new Group()));
         when(attributeRepository.findByKey(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(AttributeNotFoundException.class, () -> userService.createUser(newUserDto));
+        assertThrows(AttributeNotFoundException.class, () -> userService.signup(newUserDto));
     }
 
     @Test

@@ -7,4 +7,6 @@ public interface PasswordService {
 
     public boolean validatePassword(User user, String inputPassword);
 
+    public void generateVerificationCode(User user);
+
 }

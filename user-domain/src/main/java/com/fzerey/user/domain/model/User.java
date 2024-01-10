@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fzerey.user.shared.exceptions.token.InvalidTokenException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,15 +28,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Transactional
 @Table(name = "users")
-public class User {
+public class User extends AuditableEntity{
 
     public User(String username, String email, String phoneNumber, Group group) {
+        super();
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.group = group;
         this.subId = UUID.randomUUID().toString();
+        this.isActive = true;
+        this.isVerified = false;
     }
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +66,13 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "is_active")
-    private String isActive;
+    private boolean isActive;
+
+    @Column(name = "is_verified")
+    private boolean isVerified;
+
+    @Column(name = "verification_code")
+    private String verificationCode;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -68,9 +81,33 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAttribute> userAttributes = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Token> tokens = new HashSet<>();
+
     public void addAttribute(UserAttribute userAttribute) {
         if (userAttributes == null)
             userAttributes = new HashSet<>();
         userAttributes.add(userAttribute);
+    }
+
+    public void addToken(Token token) {
+        if (tokens == null)
+            tokens = new HashSet<>();
+        tokens.add(token);
+    }
+
+    public void refreshToken(Token existingToken, Token newToken) throws InvalidTokenException {
+        if(!existingToken.isValid())
+            throw new InvalidTokenException();
+            
+        tokens.stream().filter(t -> t.getId().equals(existingToken.getId())).findFirst()
+                .orElseThrow().setValid(false);
+        tokens.add(newToken);
+    }
+
+    public void logout(){
+        for(var token : tokens){
+            token.setValid(false);
+        }
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import com.fzerey.user.service.user.dtos.CreateUserDto;
+import com.fzerey.user.service.user.dtos.SignupUserDto;
 import com.fzerey.user.service.user.dtos.UserAttributeDto;
 
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateUserModel {
+public class SignupUserModel {
 
     @NotBlank(message = "Username cannot be null")
     private String username;
@@ -34,9 +34,9 @@ public class CreateUserModel {
     @Valid
     private List<UserAttributeModel> attributes;
 
-    public CreateUserDto toUserDto() {
+    public SignupUserDto toDto() {
         var userAttributes = attributes == null || attributes.isEmpty() ? new ArrayList<UserAttributeDto>()
                 : attributes.stream().map(UserAttributeModel::toDto).toList();
-        return new CreateUserDto(username, password, email, phoneNumber, groupId, userAttributes);
+        return new SignupUserDto(username, password, email, phoneNumber, groupId, userAttributes);
     }
 }

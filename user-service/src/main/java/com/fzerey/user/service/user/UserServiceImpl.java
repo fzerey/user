@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 import com.fzerey.user.domain.model.User;
 import com.fzerey.user.domain.model.UserAttribute;
 import com.fzerey.user.domain.service.PasswordService;
+import com.fzerey.user.infrastructure.io.EmailService;
 import com.fzerey.user.infrastructure.repository.AttributeRepository;
 import com.fzerey.user.infrastructure.repository.GroupRepository;
 import com.fzerey.user.infrastructure.repository.UserRepository;
-import com.fzerey.user.service.user.dtos.CreateUserDto;
 import com.fzerey.user.service.user.dtos.GetUserDto;
 import com.fzerey.user.service.user.dtos.ListUserDto;
+import com.fzerey.user.service.user.dtos.SignupUserDto;
 import com.fzerey.user.service.user.dtos.UpdateUserDto;
 import com.fzerey.user.service.user.dtos.UserAttributeDto;
 import com.fzerey.user.shared.exceptions.attribute.AttributeNotFoundException;
@@ -32,23 +33,24 @@ public class UserServiceImpl implements UserService {
     private final GroupRepository groupRepository;
     private final AttributeRepository attributeRepository;
     private final PasswordService passwordService;
+    private final EmailService emailService;
 
     public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository,
-            AttributeRepository attributeRepository, PasswordService passwordService) {
+            AttributeRepository attributeRepository, PasswordService passwordService, EmailService emailService) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.attributeRepository = attributeRepository;
         this.passwordService = passwordService;
+        this.emailService = emailService;
     }
 
     @Override
-    public void createUser(CreateUserDto userDto) {
+    public void signup(SignupUserDto userDto) {
         userRepository.findByUsername(userDto.getUsername()).ifPresent(u -> {
             throw new UserAlreadyExistsException();
         });
         var group = groupRepository.findById(userDto.getGroupId()).orElseThrow(GroupNotFoundException::new);
-        User user = new User(userDto.getUsername(), userDto.getEmail(), userDto.getPhoneNumber(),
-                group);
+        User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), group);
         passwordService.setPassword(user, userDto.getPassword());
         var attributes = userDto.getAttributes();
         for (var attr : attributes) {
@@ -59,7 +61,12 @@ public class UserServiceImpl implements UserService {
             userAttribute.setAttribute(attribute);
             user.addAttribute(userAttribute);
         }
+        passwordService.generateVerificationCode(user);
         userRepository.save(user);
+        emailService.sendSimpleMessage(user.getEmail(), "Verification Code",
+                String.format("Hello %s, your verification code is %s",
+                        user.getUsername(), user.getVerificationCode()));
+
     }
 
     @Override
@@ -113,6 +120,14 @@ public class UserServiceImpl implements UserService {
         var response = new PagedResponse<GetUserDto>();
         response.fromPage(users.map(this::convertToGetUserDto));
         return response;
+    }
+
+    @Override
+    public void verify(Long id, String code) {
+        var user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        user.setVerified(true);
+        user.setVerificationCode(null);
+        userRepository.save(user);
     }
 
     private GetUserDto convertToGetUserDto(User user) {

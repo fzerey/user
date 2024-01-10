@@ -27,6 +27,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <version>3.2.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fzerey</groupId>
@@ -67,6 +73,24 @@
       <artifactId>jaxb-api</artifactId>
       <version>2.3.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j2</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.graylog2/gelfj -->
+    <dependency>
+      <groupId>org.graylog2</groupId>
+      <artifactId>gelfj</artifactId>
+      <version>1.1.16</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.11.0</version>
+    </dependency>
+
 
   </dependencies>
 

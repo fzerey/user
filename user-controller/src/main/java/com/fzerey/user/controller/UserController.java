@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fzerey.user.controller.model.CreateUserModel;
 import com.fzerey.user.controller.model.ListUserModel;
+import com.fzerey.user.controller.model.SignupUserModel;
+import com.fzerey.user.controller.model.VerifyUserModel;
 import com.fzerey.user.service.user.UserService;
 import com.fzerey.user.service.user.dtos.GetUserDto;
 import com.fzerey.user.shared.requests.model.PagedResponse;
@@ -30,22 +31,30 @@ public class UserController {
     }
 
     @PostMapping
-    ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserModel createUserModel, BindingResult bindingResult) {
-        var createUserDto = createUserModel.toUserDto();
-        userService.createUser(createUserDto);
+    ResponseEntity<Void> signup(@Valid @RequestBody SignupUserModel model) {
+        var dto = model.toDto();
+        userService.signup(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @GetMapping
-    ResponseEntity<PagedResponse<GetUserDto>> listUsers(@ModelAttribute ListUserModel model) {
+    ResponseEntity<PagedResponse<GetUserDto>> list(@ModelAttribute ListUserModel model) {
         var users = userService.getUsers(model.toDto());
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
+    ResponseEntity<GetUserDto> get(@PathVariable Long id) {
         var user = userService.getUser(id);
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/{id}/verify")
+    ResponseEntity<Void> verify(@PathVariable Long id, @RequestBody VerifyUserModel model) {
+        userService.verify(id, model.getCode());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
 
 }

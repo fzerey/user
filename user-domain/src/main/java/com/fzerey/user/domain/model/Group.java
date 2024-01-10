@@ -19,9 +19,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "groups")
-public class Group {
+public class Group extends AuditableEntity{
     
     public Group(String name) {
+        super();
         this.name = name;
     }
 

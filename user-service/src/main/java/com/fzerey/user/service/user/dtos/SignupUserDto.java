@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateUserDto {
+public class SignupUserDto {
 
-    public CreateUserDto(String username, String password, String email, String phoneNumber, Long groupId,
+    public SignupUserDto(String username, String password, String email, String phoneNumber, Long groupId,
             List<UserAttributeDto> attributes) {
         this.username = username;
         this.password = password;
