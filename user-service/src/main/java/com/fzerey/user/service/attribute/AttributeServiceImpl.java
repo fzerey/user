@@ -17,7 +17,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void CreateAttribute(CreateAttributeDto createAttributeDto) {
+    public void createAttribute(CreateAttributeDto createAttributeDto) {
         var existingAttribute = attributeRepository.findByKey(createAttributeDto.getKey());
         if (existingAttribute.isPresent()) {
             throw new AttributeAlreadyExistsException();
