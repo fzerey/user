@@ -7,6 +7,7 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.fzerey.user.domain.model.User;
+import com.fzerey.user.shared.exceptions.user.UserPasswordGenerationException;
 
 @Service
 public class PasswordServiceImpl implements PasswordService {
@@ -37,12 +38,10 @@ public class PasswordServiceImpl implements PasswordService {
             }
             generatedPassword = sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new UserPasswordGenerationException();
         }
         return generatedPassword;
     }
-
-    private static final Random random = new Random();
 
     private byte[] generateSalt() {
         byte[] salt = new byte[16];
@@ -53,6 +52,7 @@ public class PasswordServiceImpl implements PasswordService {
 
     @Override
     public void generateVerificationCode(User user) {
+        SecureRandom random = new SecureRandom();
         String code = String.format("%06d", random.nextInt(999999));
         user.setVerificationCode(code);
     }
