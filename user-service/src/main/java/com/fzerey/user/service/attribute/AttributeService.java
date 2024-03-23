@@ -5,6 +5,6 @@ import com.fzerey.user.service.attribute.dtos.CreateAttributeDto;
 public interface AttributeService {
     
 
-    public void CreateAttribute(CreateAttributeDto createAttributeDto);
+    public void createAttribute(CreateAttributeDto createAttributeDto);
 
 }

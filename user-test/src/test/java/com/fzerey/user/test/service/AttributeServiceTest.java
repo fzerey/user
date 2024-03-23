@@ -37,7 +37,7 @@ class AttributeServiceTest {
         CreateAttributeDto createAttributeDto = new CreateAttributeDto("attributeKey");
         when(attributeRepository.findByKey("attributeKey")).thenReturn(Optional.empty());
 
-        attributeService.CreateAttribute(createAttributeDto);
+        attributeService.createAttribute(createAttributeDto);
 
         verify(attributeRepository).save(any(Attribute.class));
     }
@@ -50,7 +50,7 @@ class AttributeServiceTest {
         when(attributeRepository.findByKey("existingKey")).thenReturn(Optional.of(existingAttribute));
 
         assertThrows(AttributeAlreadyExistsException.class,
-                () -> attributeService.CreateAttribute(createAttributeDto));
+                () -> attributeService.createAttribute(createAttributeDto));
     }
 
 }
